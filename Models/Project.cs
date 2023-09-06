@@ -22,17 +22,4 @@ namespace MVCTaskmanager.Models
         public virtual ClientLocation? ClientLocation { get; set; }
 
     }
-    /*
-    public class TaskManagerDbContext : DbContext
-    {
-        public DbSet<Project> Projects { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionBuilder)
-        {
-            base.OnConfiguring(optionBuilder);
-            //optionBuilder.UseSqlServer("data source=LAPTOP-CG29M1EU\\SQLEXPRESS; integrated security=yes;User ID=sa;Password=Incorrect22_;initial catalog=TaskManager;TrustServerCertificate=True;");
-            optionBuilder.UseSqlServer("Server=LAPTOP-CG29M1EU\\SQLEXPRESS;Initial Catalog=TaskManager;Integrated Security=False;User ID=sa;Password=Incorrect22_;MultipleActiveResultSets=True;TrustServerCertificate=True;");
-
-        }
-    }*/
 }

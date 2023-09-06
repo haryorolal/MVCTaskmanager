@@ -12,18 +12,22 @@ namespace TaskManagerMVC.Controllers
         private IUsersService _usersService;
         private readonly IAntiforgery _antiforgery;
         private readonly ApplicationSignInManager _applicationSignInManager;
-        public AccountController(IUsersService usersService, ApplicationSignInManager applicationSignInManager, IAntiforgery antiforgery)
+        private readonly ApplicationDbContext _db;
+        private readonly ApplicationUserManager _applicationUserManager;
+        public AccountController(IUsersService usersService, ApplicationSignInManager applicationSignInManager, IAntiforgery antiforgery, ApplicationDbContext db, ApplicationUserManager applicationUserManager)
         {
             _usersService = usersService;
             _applicationSignInManager = applicationSignInManager;
             _antiforgery = antiforgery;
+            _db = db;
+            _applicationUserManager = applicationUserManager;
         }
 
         [HttpPost]
         [Route("authenticate")]
         public async Task<IActionResult> Authenticate([FromBody] LoginViewModel loginViewModel)
         {
-            if(loginViewModel.userName != null && loginViewModel.Password != null)
+            if(loginViewModel.UserName != null && loginViewModel.Password != null)
             {
                 var user = await _usersService.Authenticate(loginViewModel);
                 if (user == null)
@@ -71,6 +75,22 @@ namespace TaskManagerMVC.Controllers
             var user = await _usersService.GetUserByEmail(email);
             
             return Ok(user);
+        }
+
+        [Route("api/getAllEmployees")]
+        public async Task<IActionResult> GetAllEmployees()
+        {
+            List<ApplicationUser> users = this._db.Users.ToList();
+            List<ApplicationUser> employeeUsers = new List<ApplicationUser>();
+
+            foreach (var item in users)
+            {
+                if ( ( await this._applicationUserManager.IsInRoleAsync(item, "Employee") ) )
+                {
+                    employeeUsers.Add(item);
+                }
+            }
+            return Ok(employeeUsers);
         }
     }
 }

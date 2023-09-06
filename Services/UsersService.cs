@@ -33,10 +33,10 @@ namespace MVCTaskmanager.Services
 
         public async Task<ApplicationUser> Authenticate(LoginViewModel loginViewModel)
         {
-            var result = await this._applicationSignInManager.PasswordSignInAsync(loginViewModel.userName, loginViewModel.Password, false, false);
+            var result = await this._applicationSignInManager.PasswordSignInAsync(loginViewModel.UserName, loginViewModel.Password, false, false);
             if (result.Succeeded)
             {
-                var applicationUser = await _applicationUserManager.FindByNameAsync(loginViewModel.userName);
+                var applicationUser = await _applicationUserManager.FindByNameAsync(loginViewModel.UserName);
                 applicationUser.PasswordHash = null;
                 if (await this._applicationUserManager.IsInRoleAsync(applicationUser, "Admin")) applicationUser.Role = "Admin";
                 else if (await this._applicationUserManager.IsInRoleAsync(applicationUser, "Employee")) applicationUser.Role = "Employee";
@@ -71,6 +71,7 @@ namespace MVCTaskmanager.Services
         public async Task<ApplicationUser> Register(SignUpViewModel signUpViewModel)
         {
             //Email,Mobile, DateOfBirth,Password,Gender, CountryID, ReceiveNewsLetters,Skills
+            var EmployeeRole = "Employee";
 
             ApplicationUser applicationUser = new ApplicationUser();
             applicationUser.Id = Guid.NewGuid().ToString();
@@ -83,9 +84,17 @@ namespace MVCTaskmanager.Services
             applicationUser.ReceiveNewsLetters = signUpViewModel.ReceiveNewsLetters;
             applicationUser.CountryID = signUpViewModel.CountryID;            
             applicationUser.UserName = signUpViewModel.Email;
-            applicationUser.Role = "Employee";
+            applicationUser.Role = EmployeeRole;
 
             var result = await this._applicationUserManager.CreateAsync(applicationUser, signUpViewModel.Password);
+
+            var userInRole = this._applicationUserManager.IsInRoleAsync(applicationUser, EmployeeRole).Result;
+            
+            if (!userInRole)
+            {
+                await _applicationUserManager.AddToRoleAsync(applicationUser, EmployeeRole );
+            }         
+            
 
             if (result.Succeeded)
             {                
@@ -93,7 +102,7 @@ namespace MVCTaskmanager.Services
 
                 if (result2.Succeeded)
                 {
-                    applicationUser.PasswordHash = null;
+                    //applicationUser.PasswordHash = null;
 
                     //create token handler
                     var tokenHandler = new JwtSecurityTokenHandler();

@@ -4,6 +4,7 @@ using MVCTaskmanager.identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVCTaskmanager.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230316085011_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -203,102 +206,6 @@ namespace MVCTaskmanager.Migrations
                             TaskStatusID = 5,
                             TaskStatusName = "Reverted"
                         });
-                });
-
-            modelBuilder.Entity("MVCTaskmanager.Models.TaskStatusDetail", b =>
-                {
-                    b.Property<int>("TaskStatusDetailID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskStatusDetailID"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("StatusUpdateDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("TaskID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TaskStatus")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TaskStatusID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TheTaskTaskID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("TaskStatusDetailID");
-
-                    b.HasIndex("TheTaskTaskID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("TaskStatusDetails");
-                });
-
-            modelBuilder.Entity("MVCTaskmanager.Models.TheTask", b =>
-                {
-                    b.Property<int>("TaskID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskID"));
-
-                    b.Property<string>("AssignedTo")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LastUpdateOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("ProjectID")
-                        .IsRequired()
-                        .HasColumnType("int");
-
-                    b.Property<string>("TaskCreatedBy")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("TaskCreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("TaskCurrentStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TaskCurrentStatusID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TaskName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("TaskPriorityID")
-                        .IsRequired()
-                        .HasColumnType("int");
-
-                    b.HasKey("TaskID");
-
-                    b.HasIndex("AssignedTo");
-
-                    b.HasIndex("ProjectID");
-
-                    b.HasIndex("TaskCreatedBy");
-
-                    b.HasIndex("TaskPriorityID");
-
-                    b.ToTable("TheTasks");
                 });
 
             modelBuilder.Entity("MVCTaskmanager.Models.country", b =>
@@ -626,52 +533,6 @@ namespace MVCTaskmanager.Migrations
                     b.Navigation("ClientLocation");
                 });
 
-            modelBuilder.Entity("MVCTaskmanager.Models.TaskStatusDetail", b =>
-                {
-                    b.HasOne("MVCTaskmanager.Models.TheTask", null)
-                        .WithMany("TaskStatusDetails")
-                        .HasForeignKey("TheTaskTaskID");
-
-                    b.HasOne("MVCTaskmanager.identity.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("MVCTaskmanager.Models.TheTask", b =>
-                {
-                    b.HasOne("MVCTaskmanager.identity.ApplicationUser", "AssignedToUser")
-                        .WithMany()
-                        .HasForeignKey("AssignedTo");
-
-                    b.HasOne("MVCTaskmanager.Models.Project", "Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MVCTaskmanager.identity.ApplicationUser", "TaskCreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("TaskCreatedBy");
-
-                    b.HasOne("MVCTaskmanager.Models.TaskPriority", "TaskPriority")
-                        .WithMany()
-                        .HasForeignKey("TaskPriorityID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AssignedToUser");
-
-                    b.Navigation("Project");
-
-                    b.Navigation("TaskCreatedByUser");
-
-                    b.Navigation("TaskPriority");
-                });
-
             modelBuilder.Entity("MVCTaskmanager.Models.skills", b =>
                 {
                     b.HasOne("MVCTaskmanager.identity.ApplicationUser", "ApplicationUser")
@@ -730,11 +591,6 @@ namespace MVCTaskmanager.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("MVCTaskmanager.Models.TheTask", b =>
-                {
-                    b.Navigation("TaskStatusDetails");
                 });
 #pragma warning restore 612, 618
         }

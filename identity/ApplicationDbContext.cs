@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MVCTaskmanager.Models;
-//using TaskStatus = MVCTaskmanager.Models.TaskStatus;
 
 namespace MVCTaskmanager.identity
 {
@@ -18,11 +17,12 @@ namespace MVCTaskmanager.identity
         public DbSet<ClientLocation> ClientLocations { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<IdentityRole> ApplicationRoles { get; set; }
-
         public DbSet<country> Countries { get; set; }
         public DbSet<skills> Skills { get; set; }
         public DbSet<TaskPriority> TaskPriorities { get; set; }
         public DbSet<TaskStat> TaskStatuses { get; set; }
+        public DbSet<TheTask> TheTasks { get; set; }
+        public DbSet<TaskStatusDetail> TaskStatusDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

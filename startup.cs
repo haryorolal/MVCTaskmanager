@@ -16,7 +16,7 @@ namespace MVCTaskmanager
 {
     public static class startup
     {
-        public static IConfiguration _Configuration { get; set; }
+        /*public static IConfiguration _Configuration { get; set; }
         public static WebApplication InitializeApp(string[] args) 
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -132,6 +132,6 @@ namespace MVCTaskmanager
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}");
           }
-
+        */
     }
 }
